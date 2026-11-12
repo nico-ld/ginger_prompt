@@ -9,6 +9,7 @@ ORANGE='%F{208}'
 PURPLE_GIT='%F{129}'
 RED='%F{196}'
 BROWN='%F{130}'
+DARK_GRAY='%F{240}'
 GREEN='%F{34}'
 RESET='%f%k'
 BOLD='%B'
@@ -152,6 +153,7 @@ custom_path() {
 build_prompt() {
 	# Get last command code
 	local error_code=$?
+	local virtual_env=""
 
 	# Calculate execution time if a command was run
 	if [[ -n $cmd_start_time ]]; then
@@ -162,8 +164,12 @@ build_prompt() {
 		cmd_exec_time=0
 	fi
 
+	if env | grep -q "VIRTUAL_ENV_PROMPT"; then
+	    virtual_env="${DARK_GRAY}$VIRTUAL_ENV_PROMPT${RESET}"
+	fi
+
 	# Main prompt: path, git status, green/red arrow based on exit code
-    PROMPT="$(custom_path)$(git_prompt) %(?.${GREEN}.${RED}{${error_code}} )❯${RESET} "
+    PROMPT="${virtual_env}$(custom_path)$(git_prompt) %(?.${GREEN}.${RED}{${error_code}} )❯${RESET} "
 	
 	# Right prompt: execution time and current time
 	RPROMPT="$(format_exec_time) ${ORANGE}%T${RESET}"
