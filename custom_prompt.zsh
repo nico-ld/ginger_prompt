@@ -164,12 +164,12 @@ build_prompt() {
 		cmd_exec_time=0
 	fi
 
-	if env | grep "VIRTUAL_ENV" | grep "$PWD"; then
-	    virtual_env="(${DARK_GRAY}$VIRTUAL_ENV_PROMPT${RESET})"
+	if env | grep "VIRTUAL_ENV" | grep -q "$PWD"; then
+	    virtual_env="${DARK_GRAY}($VIRTUAL_ENV_PROMPT)${RESET} "
 	fi
 
 	# Main prompt: path, git status, green/red arrow based on exit code
-    PROMPT="${virtual_env} $(custom_path)$(git_prompt) %(?.${GREEN}.${RED}{${error_code}} )❯${RESET} "
+    PROMPT="${virtual_env}$(custom_path)$(git_prompt) %(?.${GREEN}.${RED}{${error_code}} )❯${RESET} "
 	
 	# Right prompt: execution time and current time
 	RPROMPT="$(format_exec_time) ${ORANGE}%T${RESET}"
